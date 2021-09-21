@@ -1,5 +1,7 @@
 # Project folder
 cache/
+**/.vagrant/
+*.log
 
 # third-party library
 
