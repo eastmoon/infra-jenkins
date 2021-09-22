@@ -1,4 +1,5 @@
 # Project folder
+.env
 cache/
 **/.vagrant/
 *.log

@@ -126,24 +126,30 @@ goto end
 
 :: ------------------- Command "up" mathod -------------------
 
-:cli-up (
-    echo ^> Server UP with %PROJECT_ENV% environment
+:cli-up-docker-prepare (
+    @rem Create .env for compose
+    echo Current Environment %PROJECT_ENV%
+    echo TAG=%PROJECT_NAME% > ./docker/.env
+    echo JENKINS_DATA=%cd%\cache\jenkins-data >> ./docker/.env
+    echo JENKINS_DOCKER_CERTS=%cd%\cache\jenkins-docker-certs >> ./docker/.env
 
-    echo ^> Initial cache
+    echo ^> Build ebook Docker images
+    docker build --rm ^
+        -t docker-jenkins:%PROJECT_NAME% ^
+        ./docker/jenkins
+
     IF NOT EXIST %cd%\cache (
         mkdir %cd%\cache
     )
+    goto end
+)
+
+:cli-up (
+    echo ^> Server UP with %PROJECT_ENV% environment
+    call :cli-up-docker-prepare
+
     echo ^> Startup Jenkins service
-    docker run ^
-        --rm ^
-        --detach ^
-        --privileged ^
-        --volume %cd%\cache\jenkins-docker-certs:/certs/client ^
-        --volume %cd%\cache\jenkins-data:/var/jenkins_home ^
-        -p 8080:8080 ^
-        -p 50000:50000 ^
-        --name docker-jenkins-%PROJECT_NAME% ^
-        jenkins/jenkins:lts-jdk11
+    docker-compose -f ./docker/docker-compose.yml up -d
     goto end
 )
 
@@ -164,7 +170,7 @@ goto end
 
 :cli-down (
     echo ^> Server DOWN
-    docker rm -f docker-jenkins-%PROJECT_NAME%
+    docker-compose -f ./docker/docker-compose.yml down
     goto end
 )
 

@@ -1,0 +1,36 @@
+# Docker-Compose document
+# Ref : https://docs.docker.com/compose/compose-file/
+
+version: "2.0"
+services:
+  docker:
+    image: docker:dind
+    container_name: docker-daemon_${TAG}
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    privileged: true
+    volumes:
+      - ${JENKINS_DATA}:/var/jenkins_home
+      - ${JENKINS_DOCKER_CERTS}:/certs/client
+    networks:
+      - jenkins
+
+  jenkins:
+    image: docker-jenkins:${TAG}
+    container_name: docker-jenkins_${TAG}
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - ${JENKINS_DATA}:/var/jenkins_home
+      - ${JENKINS_DOCKER_CERTS}:/certs/client:ro
+    networks:
+      - jenkins
+
+networks:
+  jenkins:
+    driver: bridge
