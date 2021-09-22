@@ -19,10 +19,21 @@ jenkinsw down
 ```
 
 ### Linux 環境
-> 若需要 Linux 環境可使用 Vagrant & VirtualBox 啟用本專案提供的設定啟動虛擬環境，專案目錄會掛載於 ```~/git/infra-jenkins``` 
+> 若需要 Linux 環境可使用 Vagrant & VirtualBox 啟用本專案提供的設定啟動虛擬環境，專案目錄會掛載於 ```~/git/infra-jenkins```
 
+使用 ```jenkinsw.sh``` 做為服務的 CLI，此指令僅限於本應用服務執行於 Windows 環境
 
++ 啟動 Jenkins 服務
 
+```
+sudo bash jenkinsw.sh up
+```
+
++ 關閉 Jenkins 服務
+
+```
+sudo bash jenkinsw.sh down
+```
 
 ## 設定
 
@@ -37,8 +48,6 @@ jenkinsw down
 + [Initial first administrator user](https://www.jenkins.io/doc/book/installing/docker/#creating-the-first-administrator-user)
     - 設定管理者用戶
     - 因 Jenkins 服務啟動後的內容會掛載於外部目錄，即使關閉並再次啟動服務，相關設定仍會保存
-
----
 
 ## 代理人 ( Agent )
 

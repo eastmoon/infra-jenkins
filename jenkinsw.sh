@@ -129,20 +129,17 @@ function cli-help() {
 
 function cli-up {
     echo "> Server UP with ${PROJECT_ENV} environment"
-
+    echo TAG=${PROJECT_NAME} > .env
+    echo JENKINS_DATA=${CLI_DIRECTORY}/cache/jenkins-data >> .env
+    echo JENKINS_DOCKER_CERTS=${CLI_DIRECTORY}/cache/jenkins-docker-certs >> .env
     echo "> Initial cache"
     [ ! -d ${CLI_DIRECTORY}/cache ] && mkdir ${CLI_DIRECTORY}/cache
+    echo "> Build service image"
+    docker build --rm \
+        -t docker-jenkins:${PROJECT_NAME} \
+        ./docker/jenkins
     echo "> Startup Jenkins service"
-    docker run \
-      --rm \
-      --detach \
-      --privileged \
-      --publish 8080:8080 \
-      --publish 50000:50000 \
-      --volume ${CLI_DIRECTORY}/cache/jenkins-data:/var/jenkins_home \
-      --volume ${CLI_DIRECTORY}/cache/jenkins-docker-certs:/certs/client:ro \
-      --name docker-jenkins-${PROJECT_NAME} \
-      jenkins/jenkins:lts-jdk11
+    docker-compose -f ./docker/docker-compose.yml up -d
 }
 
 function cli-up-args {
@@ -162,7 +159,7 @@ function cli-up-help {
 
 function cli-down {
     echo "> Server DOWN"
-    docker rm -f docker-jenkins-${PROJECT_NAME}
+    docker-compose -f ./docker/docker-compose.yml down
 }
 
 function cli-down-args {
