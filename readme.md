@@ -93,3 +93,7 @@ sudo bash jenkinsw.sh down
     - [Jenkins Architecture Explained – Beginners Guide](https://devopscube.com/jenkins-architecture-explained/)
 + 相關技術
     - [Jenkins Pipeline Tutorial For Beginners](https://devopscube.com/jenkins-pipeline-as-code/)
+    - [Travis-CI vs Jenkins: What is the difference?](D:\Document\Gitlab\DEVOPS\iwa-devops)
+        + **small open source projects are best suited for Travis CI as it is easy to run and quick to set up. On the other hand, large enterprise is best suited to Jenkins as it offers free licensing for a private project and a wide range of customizable feature.**
+        + [Travis CI vs Gitlab CI](https://knapsackpro.com/ci_comparisons/travis-ci/vs/gitlab-ci)
+            - 依據眾多參考文獻可知，Travis CI 與 Gitlab CI 在功能與操作性上高度重疊，因此若僅需要專案獨立編譯與部屬，可使用 Gitlab CI 替代
