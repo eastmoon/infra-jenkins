@@ -35,7 +35,17 @@ sudo bash jenkinsw.sh up
 sudo bash jenkinsw.sh down
 ```
 
-## 設定
+
+## 介紹
+
+#### [Introduction](https://www.tutorialspoint.com/jenkins/index.htm)
+
+**Jenkins is a powerful application that allows continuous integration and continuous delivery of projects, regardless of the platform you are working on.**
+
+![How it work](https://devopscube.com/wp-content/uploads/2020/03/jenkins-architecture-1024x657.png.webp)
+
+
+### 設定
 
 本專案使用 Docker 啟用 Jenkins 服務，因此可參考 [Jenkins Docker install](https://www.jenkins.io/doc/book/installing/docker/) 文獻；再啟動後有三個主要步驟需處理：
 
@@ -49,38 +59,41 @@ sudo bash jenkinsw.sh down
     - 設定管理者用戶
     - 因 Jenkins 服務啟動後的內容會掛載於外部目錄，即使關閉並再次啟動服務，相關設定仍會保存
 
-## 代理人 ( Agent )
+### 代理人 ( Agent )
 
 + 啟動 Agent 服務
     - Vagrant + Agent service
     - Vagrant + Agent Docker service
     - Agnet Docker service
 
----
+### 腳本設計 ( Script Design )
 
-+ Jenkins 在啟動服務後才安裝 plugin
-+ Jenkins 在啟動服務後才設定主要帳戶 ?
-+ Jenkins 的 Agent 設定
+腳本設計可看成兩種類型：
 
----
++ Jenkins 整體規劃腳本
++ Jenkins 單一工作腳本
 
-疑問：如何讓 Docker container 控制外部腳本或啟動其他容器
+前者是指若重建整個 Jenkins 時，要如何讓其設計結構得以透過 SCM 保存與管理；後者是指運行 Jenkins 工作時，其工作的對應工作腳本，這部分則可參考如下 Jenkins 主要的兩個工作 ( Job ) 方式：
 
-+ [Docker Tips : about /var/run/docker.sock](https://betterprogramming.pub/about-var-run-docker-sock-3bfd276e12fd)
-+ [Control Docker containers from within container](https://fredrikaverpil.github.io/2018/12/14/control-docker-containers-from-within-container/)
-+ [Docker Privileged - Should You Run Privileged Docker Containers?](https://phoenixnap.com/kb/docker-privileged)
++ Freestyle Job
+    - Jenkins 標準工作，為單體運作單元，可用觸發器來啟動其他工作，但原則上工作間無共通處理與變數傳遞
+    - 官方並無提供腳本化方案，可編寫 Shell script 並使用 SCM 管理導入
++ Pipeline Job
+    - Jenkins 流程工作 ( Jenkins 2.0+ 版本適用 )，其執行是依據設計於中的腳本依序執行，使用 [Grovvy](https://www.eficode.com/blog/jenkins-groovy-tutorial) 語言
+    - 官方有提供腳本化方案，可編寫 Jenkinsfile 並使用 SCM 管理導入
 
----
+而前述所提的 Jenkins 整體規劃腳本，可採用兩種方式：
 
-## 介紹
++ 第三方工具
+    - [Jenkins Job Builder](https://docs.openstack.org/infra/jenkins-job-builder/index.html)
++ 設計開發模式
+    - 以 Docker 啟動本機的 Jenkins 服務
+    - 確保 Docker 掛載 ```config.xml``` 檔案、```jobs``` 目錄、```users``` 目錄
+    - 使用 UI 或 Blue Ocean 設定工作項目
+    - 掛載內容即為版本控制內容，需注意要移除不必要的動態資料檔
+    - 內容更新需重啟 Jenkisn 服務
 
-#### [Introduction](https://www.tutorialspoint.com/jenkins/index.htm)
-
-**Jenkins is a powerful application that allows continuous integration and continuous delivery of projects, regardless of the platform you are working on.**
-
-![How it work](https://devopscube.com/wp-content/uploads/2020/03/jenkins-architecture-1024x657.png.webp)
-
-##
+原則上，Jenkins 的工作、用戶、視圖規劃可以上述方式導入與備份，以此確保內容管理可受到版本控制。
 
 ## 參考
 
@@ -93,7 +106,17 @@ sudo bash jenkinsw.sh down
     - [Jenkins Architecture Explained – Beginners Guide](https://devopscube.com/jenkins-architecture-explained/)
 + 相關技術
     - [Jenkins Pipeline Tutorial For Beginners](https://devopscube.com/jenkins-pipeline-as-code/)
+        + [Main differences between Freestyle - Scripted Pipeline Job - Declarative Pipeline Job](https://support.cloudbees.com/hc/en-us/articles/115003908372)
+        + [Jenkins Hands-On Freestyle & Pipeline Jobs, and Scripts Configuration](https://faun.pub/jenkins-jobs-hands-on-for-the-different-use-cases-devops-b153efb483c7)
+        + [Configuring a Jenkins Pipeline using a YAML file](https://medium.com/wolox/dynamic-jenkins-pipelines-b04066371fbc)
     - [Travis-CI vs Jenkins: What is the difference?](D:\Document\Gitlab\DEVOPS\iwa-devops)
         + **small open source projects are best suited for Travis CI as it is easy to run and quick to set up. On the other hand, large enterprise is best suited to Jenkins as it offers free licensing for a private project and a wide range of customizable feature.**
         + [Travis CI vs Gitlab CI](https://knapsackpro.com/ci_comparisons/travis-ci/vs/gitlab-ci)
             - 依據眾多參考文獻可知，Travis CI 與 Gitlab CI 在功能與操作性上高度重疊，因此若僅需要專案獨立編譯與部屬，可使用 Gitlab CI 替代
+## 議題
+
+### 疑問：如何讓 Docker container 控制外部腳本或啟動其他容器
+
++ [Docker Tips : about /var/run/docker.sock](https://betterprogramming.pub/about-var-run-docker-sock-3bfd276e12fd)
++ [Control Docker containers from within container](https://fredrikaverpil.github.io/2018/12/14/control-docker-containers-from-within-container/)
++ [Docker Privileged - Should You Run Privileged Docker Containers?](https://phoenixnap.com/kb/docker-privileged)
