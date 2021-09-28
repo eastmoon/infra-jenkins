@@ -45,7 +45,7 @@ sudo bash jenkinsw.sh down
 ![How it work](https://devopscube.com/wp-content/uploads/2020/03/jenkins-architecture-1024x657.png.webp)
 
 
-### 設定
+### 初始化設定
 
 本專案使用 Docker 啟用 Jenkins 服務，因此可參考 [Jenkins Docker install](https://www.jenkins.io/doc/book/installing/docker/) 文獻；再啟動後有三個主要步驟需處理：
 
@@ -88,10 +88,11 @@ sudo bash jenkinsw.sh down
     - [Jenkins Job Builder](https://docs.openstack.org/infra/jenkins-job-builder/index.html)
 + 設計開發模式
     - 以 Docker 啟動本機的 Jenkins 服務
-    - 確保 Docker 掛載 ```config.xml``` 檔案、```jobs``` 目錄、```users``` 目錄
+    - 確保 Docker 掛載 ```config.xml``` 檔案、```jobs``` 目錄等
         + base on [eeacms/rsync](https://hub.docker.com/r/eeacms/rsync)
         + 啟用時 ```init.sh [source] to [cache]```
         + 開發時 ```sync.sh [cache] to [source]```，定期同步
+        + 需注意，在未完成初始化設定時，使用開發模式腳本
     - 使用 UI 或 Blue Ocean 設定工作項目
     - 掛載內容即為版本控制內容，需注意要移除不必要的動態資料檔
     - 內容更新需重啟 Jenkisn 服務
