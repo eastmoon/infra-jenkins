@@ -18,6 +18,13 @@ jenkinsw up
 jenkinsw down
 ```
 
++ Jenkins 開發模式
+
+```
+jenkinsw dev
+```
+> 開發模式會透過同步服務將透過 UI 設定完成的介面同步至 ```src``` 目錄，使對 Jenkins 的規劃可經由 git 進行版本控制
+
 ### Linux 環境
 > 若需要 Linux 環境可使用 Vagrant & VirtualBox 啟用本專案提供的設定啟動虛擬環境，專案目錄會掛載於 ```~/git/infra-jenkins```
 
@@ -34,6 +41,13 @@ sudo bash jenkinsw.sh up
 ```
 sudo bash jenkinsw.sh down
 ```
+
++ Jenkins 開發模式
+
+```
+sudo bash jenkinsw.sh dev
+```
+> 開發模式會透過同步服務將透過 UI 設定完成的介面同步至 ```src``` 目錄，使對 Jenkins 的規劃可經由 git 進行版本控制
 
 
 ## 介紹
@@ -58,6 +72,8 @@ sudo bash jenkinsw.sh down
 + [Initial first administrator user](https://www.jenkins.io/doc/book/installing/docker/#creating-the-first-administrator-user)
     - 設定管理者用戶
     - 因 Jenkins 服務啟動後的內容會掛載於外部目錄，即使關閉並再次啟動服務，相關設定仍會保存
+
+需注意，本專案的 ```src``` 目錄內容，需完成初始化設定才會更新並正常使用；其無法於初始化設定前套入，主要問題是因 Jenkins plugins 尚未完成更新與安裝導致。
 
 ### 代理人 ( Agent )
 

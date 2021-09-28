@@ -10,7 +10,7 @@ then
     then
         while :
         do
-            rsync -av --exclude=*/builds/ --include=config.xml --include=*/ --exclude=* -r ${CACHE_DIR}/jobs ${SOURCE_DIR}
+            rsync -av --exclude=*/builds/ --include=config.xml --include=*/ --exclude=* --delete-excluded -r ${CACHE_DIR}/jobs ${SOURCE_DIR}
             rsync -av --include=*.xml -r ${CACHE_DIR}/config.xml ${SOURCE_DIR}/config.xml
             sleep 1
         done
