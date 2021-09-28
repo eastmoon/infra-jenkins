@@ -119,6 +119,7 @@ goto end
     echo Command:
     echo      up                Startup Server.
     echo      down              Close down Server.
+    echo      dev               Startup DEV Server.
     echo.
     echo Run 'cli [COMMAND] --help' for more information on a command.
     goto end
@@ -138,6 +139,10 @@ goto end
         -t docker-jenkins:%PROJECT_NAME% ^
         ./docker/jenkins
 
+    docker build --rm ^
+        -t docker-jenkins-dev:%PROJECT_NAME% ^
+        ./docker/jenkins-dev
+
     IF NOT EXIST %cd%\cache (
         mkdir %cd%\cache
     )
@@ -147,7 +152,11 @@ goto end
 :cli-up (
     echo ^> Server UP with %PROJECT_ENV% environment
     call :cli-up-docker-prepare
-
+    echo ^> Initial cache from source
+    docker run -ti --rm ^
+      	-v %cd%\cache\jenkins-data:/cache ^
+      	-v %cd%\src:/source ^
+      	docker-jenkins-dev:%PROJECT_NAME% sh init.sh
     echo ^> Startup Jenkins service
     docker-compose -f ./docker/docker-compose.yml up -d
     goto end
@@ -170,6 +179,7 @@ goto end
 
 :cli-down (
     echo ^> Server DOWN
+    docker rm -f docker-jenkins-dev_%PROJECT_NAME%
     docker-compose -f ./docker/docker-compose.yml down
     goto end
 )
@@ -181,6 +191,33 @@ goto end
 :cli-down-help (
     echo This is a Command Line Interface with project %PROJECT_NAME%
     echo Close down Server
+    echo.
+    echo Options:
+    echo      --help, -h        Show more information with UP Command.
+    goto end
+)
+
+:: ------------------- Command "dev" mathod -------------------
+
+:cli-dev (
+    call :cli-up
+    echo ^> Start dev service
+    docker rm -f docker-jenkins-dev_%PROJECT_NAME%
+    docker run -ti --rm --detach^
+    	-v %cd%\cache\jenkins-data:/cache ^
+    	-v %cd%\src:/source ^
+      --name docker-jenkins-dev_%PROJECT_NAME% ^
+      docker-jenkins-dev:%PROJECT_NAME% sh sync.sh
+    goto end
+)
+
+:cli-dev-args (
+    goto end
+)
+
+:cli-dev-help (
+    echo This is a Command Line Interface with project %PROJECT_NAME%
+    echo Startup DEV Server
     echo.
     echo Options:
     echo      --help, -h        Show more information with UP Command.

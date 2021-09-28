@@ -121,6 +121,7 @@ function cli-help() {
     echo "Command:"
     echo "    up                Startup Server."
     echo "    down              Close down Server."
+    echo "    dev               Startup DEV Server."
     echo ""
     echo "Run 'cli [COMMAND] --help' for more information on a command."
 }
@@ -134,10 +135,19 @@ function cli-up {
     echo JENKINS_DOCKER_CERTS=${CLI_DIRECTORY}/cache/jenkins-docker-certs >> .env
     echo "> Initial cache"
     [ ! -d ${CLI_DIRECTORY}/cache ] && mkdir ${CLI_DIRECTORY}/cache
+    echo "> Initial c"
     echo "> Build service image"
     docker build --rm \
         -t docker-jenkins:${PROJECT_NAME} \
         ./docker/jenkins
+    docker build --rm \
+        -t docker-jenkins-dev:${PROJECT_NAME} \
+        ./docker/jenkins-dev
+    echo "> Initial cache from source"
+    docker run -ti --rm \
+      	-v ${CLI_DIRECTORY}/cache/jenkins-data:/cache \
+      	-v ${CLI_DIRECTORY}/src:/source \
+      	docker-jenkins-dev:${PROJECT_NAME} sh init.sh
     echo "> Startup Jenkins service"
     docker-compose -f ./docker/docker-compose.yml up -d
 }
@@ -159,6 +169,7 @@ function cli-up-help {
 
 function cli-down {
     echo "> Server DOWN"
+    docker rm -f docker-jenkins-dev_${PROJECT_NAME}
     docker-compose -f ./docker/docker-compose.yml down
 }
 
@@ -173,6 +184,32 @@ function cli-down-help {
     echo "Options:"
     echo "    --help, -h        Show more information with UP Command."
 }
+
+# ------------------- Command "dev" mathod -------------------
+
+function cli-dev {
+    cli-up
+    echo "> Start dev service"
+    docker rm -f docker-jenkins-dev_${PROJECT_NAME}
+    docker run -ti --rm --detach \
+      	-v ${CLI_DIRECTORY}/cache/jenkins-data:/cache \
+      	-v ${CLI_DIRECTORY}/src:/source \
+      --name docker-jenkins-dev_${PROJECT_NAME} \
+      docker-jenkins-dev:${PROJECT_NAME} sh sync.sh
+}
+
+function cli-dev-args {
+    return 0
+}
+
+function cli-dev-help {
+    echo "This is a Command Line Interface with project ${PROJECT_NAME}"
+    echo "Startup DEV Server"
+    echo ""
+    echo "Options:"
+    echo "    --help, -h        Show more information with UP Command."
+}
+
 
 # ------------------- execute script -------------------
 

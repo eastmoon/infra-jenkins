@@ -89,6 +89,9 @@ sudo bash jenkinsw.sh down
 + 設計開發模式
     - 以 Docker 啟動本機的 Jenkins 服務
     - 確保 Docker 掛載 ```config.xml``` 檔案、```jobs``` 目錄、```users``` 目錄
+        + base on [eeacms/rsync](https://hub.docker.com/r/eeacms/rsync)
+        + 啟用時 ```init.sh [source] to [cache]```
+        + 開發時 ```sync.sh [cache] to [source]```，定期同步
     - 使用 UI 或 Blue Ocean 設定工作項目
     - 掛載內容即為版本控制內容，需注意要移除不必要的動態資料檔
     - 內容更新需重啟 Jenkisn 服務
@@ -104,6 +107,7 @@ sudo bash jenkinsw.sh down
 + 架構介紹
     - [What is Jenkins: Features and Architecture Explained](https://www.simplilearn.com/tutorials/jenkins-tutorial/what-is-jenkins)
     - [Jenkins Architecture Explained – Beginners Guide](https://devopscube.com/jenkins-architecture-explained/)
+    - [Jenkins Pipeline Tutorial For Beginners](https://devopscube.com/jenkins-pipeline-as-code/)
 + 相關技術
     - [Jenkins Pipeline Tutorial For Beginners](https://devopscube.com/jenkins-pipeline-as-code/)
         + [Main differences between Freestyle - Scripted Pipeline Job - Declarative Pipeline Job](https://support.cloudbees.com/hc/en-us/articles/115003908372)
