@@ -28,7 +28,7 @@ jenkinsw dev
 ### Linux 環境
 > 若需要 Linux 環境可使用 Vagrant & VirtualBox 啟用本專案提供的設定啟動虛擬環境，專案目錄會掛載於 ```~/git/infra-jenkins```
 
-使用 ```jenkinsw.sh``` 做為服務的 CLI，此指令僅限於本應用服務執行於 Windows 環境
+使用 ```jenkinsw.sh``` 做為服務的 CLI，此指令僅限於本應用服務執行於 Linux 環境
 
 + 啟動 Jenkins 服務
 
@@ -134,10 +134,4 @@ sudo bash jenkinsw.sh dev
         + **small open source projects are best suited for Travis CI as it is easy to run and quick to set up. On the other hand, large enterprise is best suited to Jenkins as it offers free licensing for a private project and a wide range of customizable feature.**
         + [Travis CI vs Gitlab CI](https://knapsackpro.com/ci_comparisons/travis-ci/vs/gitlab-ci)
             - 依據眾多參考文獻可知，Travis CI 與 Gitlab CI 在功能與操作性上高度重疊，因此若僅需要專案獨立編譯與部屬，可使用 Gitlab CI 替代
-## 議題
-
-### 疑問：如何讓 Docker container 控制外部腳本或啟動其他容器
-
-+ [Docker Tips : about /var/run/docker.sock](https://betterprogramming.pub/about-var-run-docker-sock-3bfd276e12fd)
-+ [Control Docker containers from within container](https://fredrikaverpil.github.io/2018/12/14/control-docker-containers-from-within-container/)
-+ [Docker Privileged - Should You Run Privileged Docker Containers?](https://phoenixnap.com/kb/docker-privileged)
+    - [如何於 Docker 服務中使用 Docker 服務](https://github.com/eastmoon/research-docker-in-docker)
