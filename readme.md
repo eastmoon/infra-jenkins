@@ -134,5 +134,5 @@ sudo bash jenkinsw.sh dev
         + **small open source projects are best suited for Travis CI as it is easy to run and quick to set up. On the other hand, large enterprise is best suited to Jenkins as it offers free licensing for a private project and a wide range of customizable feature.**
         + [Travis CI vs Gitlab CI](https://knapsackpro.com/ci_comparisons/travis-ci/vs/gitlab-ci)
             - 依據眾多參考文獻可知，Travis CI 與 Gitlab CI 在功能與操作性上高度重疊，因此若僅需要專案獨立編譯與部屬，可使用 Gitlab CI 替代
-            - [https://kheresy.wordpress.com/2019/02/13/gitlab-ci-cd/](https://kheresy.wordpress.com/2019/02/13/gitlab-ci-cd/)
+            - [Gitlab CI/CD 簡單介紹](https://kheresy.wordpress.com/2019/02/13/gitlab-ci-cd/)
     - [如何於 Docker 服務中使用 Docker 服務](https://github.com/eastmoon/research-docker-in-docker)
