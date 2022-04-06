@@ -115,6 +115,15 @@ sudo bash jenkinsw.sh dev
 
 原則上，Jenkins 的工作、用戶、視圖規劃可以上述方式導入與備份，以此確保內容管理可受到版本控制。
 
+## Credentials
+
+使用 credentials 來整理 Jenkins 各工作的統一憑證管理。
+
++ [Jenkins 使用 Credentials](https://www.jenkins.io/doc/book/using/using-credentials/)
+    - [Freestyle 中使用 Build Environment 導入Credentials](https://stackoverflow.com/questions/35736377)
+    - [Pipeline 中，git 服務使用 Credentials](https://stackoverflow.com/questions/38461705)
+    - [Pipeline 中使用 Credentials](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#handling-credentials)
+
 ## 參考
 
 + [Jenkins](https://www.jenkins.io/)
